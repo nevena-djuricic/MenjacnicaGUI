@@ -6,30 +6,59 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
 import java.awt.Component;
+
 import javax.swing.JPopupMenu;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
+
 import java.awt.Dimension;
+
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
+
+
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class MenjacnicaGUI extends JFrame {
 
-	private JPanel contentPane;
+	private static JPanel contentPane;
 	private JTable table;
-
+	private String zaStatus = "";
+	private JTextArea textAreaStatus = new JTextArea();
+	
+	public static void ugasiProgram() {
+		int sifra = JOptionPane.showConfirmDialog(contentPane, 
+				"Da li zelite da izadjete iz programa?", "Izlaz", 
+				JOptionPane.YES_NO_CANCEL_OPTION);
+		if (sifra == JOptionPane.YES_OPTION)
+			System.exit(0);
+	  }
+	
 	/**
 	 * Launch the application.
 	 */
@@ -50,9 +79,14 @@ public class MenjacnicaGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public MenjacnicaGUI() {
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent arg0) {
+				ugasiProgram();
+			}
+		});
 		setTitle("Menjacnica");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 504, 354);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setBounds(100, 100, 684, 430);
 		
 		setLocationRelativeTo(null);
 		
@@ -61,25 +95,63 @@ public class MenjacnicaGUI extends JFrame {
 		
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
-		
+
 		JMenuItem mntmOpen = new JMenuItem("Open");
+		mntmOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+
+				int izabrano = fc.showOpenDialog(contentPane);
+
+				if (izabrano == JFileChooser.APPROVE_OPTION) {
+					File f = fc.getSelectedFile();
+					zaStatus += "Ucitan fajl: " + f.getAbsolutePath() + "\n";
+					textAreaStatus.setText(zaStatus);
+				}
+			}
+		});
 		mntmOpen.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/Directory.gif")));
 		mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpen);
 		
 		JMenuItem mntmSave = new JMenuItem("Save");
+		mntmSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+
+				int izabrano = fc.showSaveDialog(contentPane);
+
+				if (izabrano == JFileChooser.APPROVE_OPTION) {
+					File f = fc.getSelectedFile();
+					zaStatus += "Sacuvan fajl: " + f.getAbsolutePath() + "\n";
+					textAreaStatus.setText(zaStatus);
+				}
+			}
+		});
 		mntmSave.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
 		mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mnFile.add(mntmSave);
-		
+
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ugasiProgram();
+			}
+		});
+		
 		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK));
 		mnFile.add(mntmExit);
-		
+
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 		
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(contentPane,
+						"Nevena Djuricic", "Autor", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		mnHelp.add(mntmAbout);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -151,14 +223,14 @@ public class MenjacnicaGUI extends JFrame {
 		JButton btnIzvrsiZamenu = new JButton("Izvrsi zamenu");
 		btnIzvrsiZamenu.setBounds(10, 61, 120, 23);
 		panel.add(btnIzvrsiZamenu);
-		
+	
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setPreferredSize(new Dimension(2, 55));
 		scrollPane_1.setBorder(new TitledBorder(null, "STATUS", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		contentPane.add(scrollPane_1, BorderLayout.SOUTH);
 		
-		JTextArea textAreaStatus = new JTextArea();
 		scrollPane_1.setViewportView(textAreaStatus);
+		
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
