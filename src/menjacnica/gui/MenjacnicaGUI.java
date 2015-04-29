@@ -38,6 +38,8 @@ import javax.swing.border.TitledBorder;
 
 
 
+
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -48,9 +50,25 @@ public class MenjacnicaGUI extends JFrame {
 
 	private static JPanel contentPane;
 	private JTable table;
-	private String zaStatus = "";
-	private JTextArea textAreaStatus = new JTextArea();
+	private static String zaStatus = "";
+	private static JTextArea textAreaStatus = new JTextArea();
 	
+	public static JTextArea getTextAreaStatus() {
+		return textAreaStatus;
+	}
+
+	public static void setTextAreaStatus(String status) {
+		MenjacnicaGUI.textAreaStatus.setText(status);
+	}
+
+	public static String getZaStatus() {
+		return zaStatus;
+	}
+
+	public static void setZaStatus(String status) {
+		zaStatus = status;
+	}
+
 	public static void ugasiProgram() {
 		int sifra = JOptionPane.showConfirmDialog(contentPane, 
 				"Da li zelite da izadjete iz programa?", "Izlaz", 
@@ -199,6 +217,11 @@ public class MenjacnicaGUI extends JFrame {
 		addPopup(table, popupMenu);
 		
 		JMenuItem mntmDodajKurs = new JMenuItem("Dodaj kurs");
+		mntmDodajKurs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new DodajKursGUI().setVisible(true);
+			}
+		});
 		popupMenu.add(mntmDodajKurs);
 		
 		JMenuItem mntmObrisiKurs = new JMenuItem("Obrisi kurs");
@@ -213,6 +236,11 @@ public class MenjacnicaGUI extends JFrame {
 		panel.setLayout(null);
 		
 		JButton btnDodajKurs = new JButton("Dodaj kurs");
+		btnDodajKurs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new DodajKursGUI().setVisible(true);
+			}
+		});
 		btnDodajKurs.setBounds(10, 5, 120, 23);
 		panel.add(btnDodajKurs);
 		
@@ -225,7 +253,7 @@ public class MenjacnicaGUI extends JFrame {
 		panel.add(btnIzvrsiZamenu);
 	
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setPreferredSize(new Dimension(2, 55));
+		scrollPane_1.setPreferredSize(new Dimension(2, 60));
 		scrollPane_1.setBorder(new TitledBorder(null, "STATUS", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		contentPane.add(scrollPane_1, BorderLayout.SOUTH);
 		
