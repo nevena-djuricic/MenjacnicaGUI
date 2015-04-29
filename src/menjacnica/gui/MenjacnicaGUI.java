@@ -233,6 +233,11 @@ public class MenjacnicaGUI extends JFrame {
 		popupMenu.add(mntmObrisiKurs);
 		
 		JMenuItem mntmIzvrsiZamenu = new JMenuItem("Izvrsi zamenu");
+		mntmIzvrsiZamenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new IzvrsiZamenuGUI().setVisible(true);
+			}
+		});
 		popupMenu.add(mntmIzvrsiZamenu);
 		
 		JPanel panel = new JPanel();
@@ -259,6 +264,11 @@ public class MenjacnicaGUI extends JFrame {
 		panel.add(btnIzbrisiKurs);
 		
 		JButton btnIzvrsiZamenu = new JButton("Izvrsi zamenu");
+		btnIzvrsiZamenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new IzvrsiZamenuGUI().setVisible(true);
+			}
+		});
 		btnIzvrsiZamenu.setBounds(10, 61, 120, 23);
 		panel.add(btnIzvrsiZamenu);
 	
