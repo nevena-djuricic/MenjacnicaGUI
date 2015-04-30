@@ -45,18 +45,19 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Toolkit;
 
 public class MenjacnicaGUI extends JFrame {
 
 	private static JPanel contentPane;
 	private JTable table;
 	private static String zaStatus = "";
-	private static JTextArea textAreaStatus = new JTextArea();
+	final static JTextArea textAreaStatus = new JTextArea();
 	
 	public static JTextArea getTextAreaStatus() {
 		return textAreaStatus;
 	}
-
+	
 	public static void setTextAreaStatus(String status) {
 		MenjacnicaGUI.textAreaStatus.setText(status);
 	}
@@ -69,14 +70,14 @@ public class MenjacnicaGUI extends JFrame {
 		zaStatus = status;
 	}
 
-	public static void ugasiProgram() {
+	private static void ugasiProgram() {
 		int sifra = JOptionPane.showConfirmDialog(contentPane, 
 				"Da li zelite da izadjete iz programa?", "Izlaz", 
 				JOptionPane.YES_NO_CANCEL_OPTION);
 		if (sifra == JOptionPane.YES_OPTION)
 			System.exit(0);
-	  }
-	
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -97,6 +98,7 @@ public class MenjacnicaGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public MenjacnicaGUI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent arg0) {
 				ugasiProgram();
@@ -105,14 +107,133 @@ public class MenjacnicaGUI extends JFrame {
 		setTitle("Menjacnica");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 684, 430);
-		
+
 		setLocationRelativeTo(null);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
+
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
+
+		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(contentPane,
+						"Nevena Djuricic", "Autor", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		mnHelp.add(mntmAbout);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+
+		table = new JTable();
+		table.setFillsViewportHeight(true);
+		table.setModel(new DefaultTableModel(
+				new Object[][] {
+						{null, "", null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+						{null, null, null, null, null, null},
+				},
+				new String[] {
+						"\u0160ifra", "Skra\u0107eni naziv", "Prodajni", "Srednji", "Kupovni", "Naziv"
+				}
+				) {
+			Class[] columnTypes = new Class[] {
+					Integer.class, String.class, Double.class, Double.class, Double.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		table.getColumnModel().getColumn(0).setPreferredWidth(85);
+		table.getColumnModel().getColumn(1).setPreferredWidth(85);
+		table.getColumnModel().getColumn(2).setPreferredWidth(85);
+		table.getColumnModel().getColumn(3).setPreferredWidth(85);
+		table.getColumnModel().getColumn(4).setPreferredWidth(85);
+		table.getColumnModel().getColumn(5).setPreferredWidth(85);
+		scrollPane.setViewportView(table);
+
+		JPopupMenu popupMenu = new JPopupMenu();
+		addPopup(table, popupMenu);
+
+		JMenuItem mntmDodajKurs = new JMenuItem("Dodaj kurs");
+		mntmDodajKurs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new DodajKursGUI().setVisible(true);
+			}
+		});
+		popupMenu.add(mntmDodajKurs);
+
+		JMenuItem mntmObrisiKurs = new JMenuItem("Obrisi kurs");
+		mntmObrisiKurs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new ObrisiKursGUI().setVisible(true);
+			}
+		});
+		popupMenu.add(mntmObrisiKurs);
+
+		JMenuItem mntmIzvrsiZamenu = new JMenuItem("Izvrsi zamenu");
+		mntmIzvrsiZamenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new IzvrsiZamenuGUI().setVisible(true);
+			}
+		});
+		popupMenu.add(mntmIzvrsiZamenu);
+
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(140, 10));
+		contentPane.add(panel, BorderLayout.EAST);
+		panel.setLayout(null);
+
+		JButton btnDodajKurs = new JButton("Dodaj kurs");
+		btnDodajKurs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new DodajKursGUI().setVisible(true);
+			}
+		});
+		btnDodajKurs.setBounds(10, 5, 120, 23);
+		panel.add(btnDodajKurs);
+
+		JButton btnObrisiKurs = new JButton("Obrisi kurs");
+		btnObrisiKurs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new ObrisiKursGUI().setVisible(true);
+			}
+		});
+		btnObrisiKurs.setBounds(10, 33, 120, 23);
+		panel.add(btnObrisiKurs);
+
+		JButton btnIzvrsiZamenu = new JButton("Izvrsi zamenu");
+		btnIzvrsiZamenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new IzvrsiZamenuGUI().setVisible(true);
+			}
+		});
+		btnIzvrsiZamenu.setBounds(10, 61, 120, 23);
+		panel.add(btnIzvrsiZamenu);
+
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setPreferredSize(new Dimension(2, 60));
+		scrollPane_1.setBorder(new TitledBorder(null, "STATUS", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		contentPane.add(scrollPane_1, BorderLayout.SOUTH);
+
+		scrollPane_1.setViewportView(textAreaStatus);
 
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
@@ -131,7 +252,7 @@ public class MenjacnicaGUI extends JFrame {
 		mntmOpen.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/Directory.gif")));
 		mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpen);
-		
+
 		JMenuItem mntmSave = new JMenuItem("Save");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -156,129 +277,9 @@ public class MenjacnicaGUI extends JFrame {
 				ugasiProgram();
 			}
 		});
-		
+
 		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK));
 		mnFile.add(mntmExit);
-
-		JMenu mnHelp = new JMenu("Help");
-		menuBar.add(mnHelp);
-		
-		JMenuItem mntmAbout = new JMenuItem("About");
-		mntmAbout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(contentPane,
-						"Nevena Djuricic", "Autor", JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
-		mnHelp.add(mntmAbout);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
-		
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		
-		table = new JTable();
-		table.setFillsViewportHeight(true);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, "", null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"\u0160ifra", "Skra\u0107eni naziv", "Prodajni", "Srednji", "Kupovni", "Naziv"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				Integer.class, String.class, Double.class, Double.class, Double.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(85);
-		table.getColumnModel().getColumn(1).setPreferredWidth(85);
-		table.getColumnModel().getColumn(2).setPreferredWidth(85);
-		table.getColumnModel().getColumn(3).setPreferredWidth(85);
-		table.getColumnModel().getColumn(4).setPreferredWidth(85);
-		table.getColumnModel().getColumn(5).setPreferredWidth(85);
-		scrollPane.setViewportView(table);
-		
-		JPopupMenu popupMenu = new JPopupMenu();
-		addPopup(table, popupMenu);
-		
-		JMenuItem mntmDodajKurs = new JMenuItem("Dodaj kurs");
-		mntmDodajKurs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new DodajKursGUI().setVisible(true);
-			}
-		});
-		popupMenu.add(mntmDodajKurs);
-		
-		JMenuItem mntmObrisiKurs = new JMenuItem("Obrisi kurs");
-		mntmObrisiKurs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new ObrisiKursGUI().setVisible(true);
-			}
-		});
-		popupMenu.add(mntmObrisiKurs);
-		
-		JMenuItem mntmIzvrsiZamenu = new JMenuItem("Izvrsi zamenu");
-		mntmIzvrsiZamenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new IzvrsiZamenuGUI().setVisible(true);
-			}
-		});
-		popupMenu.add(mntmIzvrsiZamenu);
-		
-		JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(140, 10));
-		contentPane.add(panel, BorderLayout.EAST);
-		panel.setLayout(null);
-		
-		JButton btnDodajKurs = new JButton("Dodaj kurs");
-		btnDodajKurs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new DodajKursGUI().setVisible(true);
-			}
-		});
-		btnDodajKurs.setBounds(10, 5, 120, 23);
-		panel.add(btnDodajKurs);
-		
-		JButton btnIzbrisiKurs = new JButton("Izbrisi kurs");
-		btnIzbrisiKurs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new ObrisiKursGUI().setVisible(true);
-			}
-		});
-		btnIzbrisiKurs.setBounds(10, 33, 120, 23);
-		panel.add(btnIzbrisiKurs);
-		
-		JButton btnIzvrsiZamenu = new JButton("Izvrsi zamenu");
-		btnIzvrsiZamenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new IzvrsiZamenuGUI().setVisible(true);
-			}
-		});
-		btnIzvrsiZamenu.setBounds(10, 61, 120, 23);
-		panel.add(btnIzvrsiZamenu);
-	
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setPreferredSize(new Dimension(2, 60));
-		scrollPane_1.setBorder(new TitledBorder(null, "STATUS", TitledBorder.LEFT, TitledBorder.TOP, null, null));
-		contentPane.add(scrollPane_1, BorderLayout.SOUTH);
-		
-		scrollPane_1.setViewportView(textAreaStatus);
-		
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
